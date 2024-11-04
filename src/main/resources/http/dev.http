@@ -1,0 +1,36 @@
+### Get all trips
+GET {{URL}}
+
+### Get trip by id
+GET {{URL}}/1
+
+### Create trip
+POST {{URL}}/
+Content-Type: application/json
+
+{
+  "name": "TestTrip",
+  "price": 212.0,
+  "category": "SNOW",
+  "start_time": "10:00:00",
+  "end_time": "12:00:00",
+  "longitude": 12.34567,
+  "latitude": 54.32109
+}
+
+### Update by id
+PUT {{URL}}/2
+Content-Type: application/json
+
+{
+  "name": "NewName"
+}
+
+### Delete trip by id
+DELETE {{URL}}/3
+
+### Add trip to guide // not working
+PUT {{URL}}/trips/1/guides/2
+
+### Filter Trips by category // not working
+GET {{URL}}/?category=FOREST

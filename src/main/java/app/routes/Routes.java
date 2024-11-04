@@ -7,18 +7,17 @@ import jakarta.persistence.EntityManagerFactory;
 import static io.javalin.apibuilder.ApiBuilder.path;
 
 public class Routes {
-//    private RoomRoutes roomRoutes;
+    private TripRoutes tripRoutes;
     private SecurityRoutes securityRoutes;
 
     public Routes(EntityManagerFactory emf) {
-//        hotelRoutes = new HotelRoutes(emf);
         securityRoutes = new SecurityRoutes(emf);
+        tripRoutes = new TripRoutes(emf);
     }
 
     public EndpointGroup getApiRoutes() {
         return () -> {
-//            path("/hotel", hotelRoutes.getHotelRoutes());
-//            path("/room", roomRoutes.getRoomRoutes());
+            path("/trips", tripRoutes.getTripRoutes());
             path("/", securityRoutes.getSecurityRoutes());
         };
     }
