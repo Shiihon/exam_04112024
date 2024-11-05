@@ -150,15 +150,11 @@ public class TripController implements Controller {
 
     public void getTripsByCategory(Context ctx) {
         try {
-            String categoryParam = ctx.queryParam("category");
-            if (categoryParam == null) {
-                throw new IllegalArgumentException("Category parameter is required.");
-            }
+            String categoryParam = ctx.pathParam("category"); // used query instead of param.
+
             Category category = Category.valueOf(categoryParam.toUpperCase());
 
-            List<TripDTO> allTrips = tripDAO.getAll();
-            List<TripDTO> filteredTrips = allTrips.stream().filter(t -> t.getCategory().equals(category))
-                    .toList();
+            List<TripDTO> filteredTrips = tripDAO.getTripsByCategory(category);
 
             if (filteredTrips.isEmpty()) {
                 ctx.res().setStatus(404);
@@ -170,9 +166,6 @@ public class TripController implements Controller {
 
         } catch (IllegalArgumentException e) {
             throw new ApiException(400, e.getMessage());
-
-        } catch (EntityNotFoundException e) {
-            throw new ApiException(404, e.getMessage());
 
         } catch (Exception e) {
             throw new ApiException(500, e.getMessage());

@@ -23,7 +23,7 @@ public class TripRoutes {
         return () -> {
             get("/", tripController::getAll);
             get("/{id}", tripController::getById);
-            get("/{category}", tripController::getTripsByCategory);
+            get("/category/{category}", tripController::getTripsByCategory);
             post("/", tripController::create);
             put("/{id}", tripController::update);
             delete("/{id}", tripController::delete);

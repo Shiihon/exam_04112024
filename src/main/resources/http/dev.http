@@ -32,5 +32,5 @@ DELETE {{URL}}/10
 ### Add trip to guide
 PUT {{URL}}/1/guides/2
 
-### Filter Trips by category // not working
-GET {{URL}}/?category=FOREST
+### Filter Trips by category
+GET {{URL}}/category/FOREST

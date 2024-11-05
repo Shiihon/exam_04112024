@@ -51,6 +51,10 @@ public class TripDAO implements IDAO<TripDTO>, ITripGuideDAO {
             em.getTransaction().commit();
 
             return new TripDTO(trip);
+
+        } catch (EntityExistsException e) { // added more suitable exception.
+            throw new EntityExistsException("Trip already exists: " + e.getMessage(), e);
+
         } catch (RuntimeException e) {
             throw new RuntimeException("Error creating trip : " + e.getMessage(), e);
         }
@@ -58,6 +62,7 @@ public class TripDAO implements IDAO<TripDTO>, ITripGuideDAO {
 
     @Override
     public TripDTO update(TripDTO tripDTO) {
+
         Trip trip = tripDTO.getAsEntity();
 
         try (EntityManager em = emf.createEntityManager()) {
@@ -163,7 +168,9 @@ public class TripDAO implements IDAO<TripDTO>, ITripGuideDAO {
                     .setParameter("category", category)
                     .getResultList();
 
-            return trips.stream().map(TripDTO::new).collect(Collectors.toList());
+            List<TripDTO> filteredTrips = trips.stream().map(TripDTO::new).collect(Collectors.toList());
+            em.getTransaction().commit();
+            return filteredTrips;
         }
     }
 }
