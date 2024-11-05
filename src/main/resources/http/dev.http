@@ -55,26 +55,31 @@ Authorization: Bearer {{jwt_token}}
 }
 
 ### Update by id
-PUT {{url}}/trips/11
+PUT {{url}}/trips/1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
-
 {
-  "name": "NewName"
+  "name": "Mountain safari",
+  "price": 212.0,
+  "category": "SNOW",
+  "start_time": "10:00",
+  "end_time": "12:00",
+  "longitude": 12.34567,
+  "latitude": 54.32109
 }
 
 ### Delete trip by id
-DELETE {{url}}/trips/10
+DELETE {{url}}/trips/1
 Authorization: Bearer {{jwt_token}}
 
 
 ### Add trip to guide
-PUT {{url}}/trips/1/guides/2
+PUT {{url}}/trips/1/guides/1
 Authorization: Bearer {{jwt_token}}
 
 
 ### Filter Trips by category
-GET {{url}}/trips/category/FOREST
+GET {{url}}/trips/category/SNOW
 Authorization: Bearer {{jwt_token}}
 

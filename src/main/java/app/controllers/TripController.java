@@ -124,8 +124,9 @@ public class TripController implements Controller {
             throw new ApiException(404, "trip with the given id, could not be found");
 
         } catch (Exception e) {
-            throw new ApiException(500, e.getMessage());
+            throw new ApiException(500, "Issues in the DB");
         }
+
     }
 
     @Override
