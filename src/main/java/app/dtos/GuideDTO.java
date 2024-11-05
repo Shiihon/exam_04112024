@@ -37,6 +37,12 @@ public class GuideDTO {
         this.tripsDTO = guide.getTrips().stream().map(TripDTO::new).collect(Collectors.toList());
     }
 
+//    // Custom getter to return years with the appropriate string
+//    @JsonProperty("years_of_experience")
+//    public String getYearsOfExperienceString() {
+//        return yearsOfExperience == 1 ? "1 year" : yearsOfExperience + " years";
+//    }
+
     @JsonIgnore
     public Guide getAsEntity(){
         List<Trip> tripEntities;

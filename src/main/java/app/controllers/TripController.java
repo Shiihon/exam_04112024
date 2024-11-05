@@ -13,7 +13,7 @@ import java.util.List;
 
 public class TripController implements Controller {
     private static TripDAO tripDAO;
-    private static TripService tripService;
+    private final TripService tripService;
 
     public TripController(TripDAO dao, TripService service) {
         tripDAO = dao;
@@ -47,7 +47,6 @@ public class TripController implements Controller {
 
             TripWithGuideInfoDTO tripWithGuide = tripService.getTripWithGuide(id);
 
-
             if (tripWithGuide == null) {
                 ctx.res().setStatus(404);
                 throw new EntityNotFoundException("trip with id " + id + " could not be found");
@@ -58,29 +57,6 @@ public class TripController implements Controller {
 
         } catch (EntityNotFoundException e) {
             throw new ApiException(404, e.getMessage());
-
-        } catch (Exception e) {
-            throw new ApiException(500, e.getMessage());
-        }
-    }
-
-    public void getTripWithGuide(Context ctx) {
-        try {
-            Long tripId = Long.parseLong(ctx.pathParam("tripId"));
-            TripWithGuideInfoDTO tripWithGuide = tripService.getTripWithGuide(tripId);
-
-            if (tripWithGuide == null) {
-                ctx.res().setStatus(404);
-                throw new EntityNotFoundException("Trip with id " + tripId + " could not be found");
-            }
-            ctx.res().setStatus(200);
-            ctx.json(tripWithGuide);
-
-        } catch (EntityNotFoundException e) {
-            throw new ApiException(404, e.getMessage());
-
-        } catch (NumberFormatException e) {
-            throw new ApiException(400, "Invalid ID format. Must be a number.");
 
         } catch (Exception e) {
             throw new ApiException(500, e.getMessage());

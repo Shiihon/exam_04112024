@@ -1,5 +1,7 @@
 package app.populator;
 
+import app.dtos.GuideDTO;
+import app.dtos.TripDTO;
 import app.enums.Category;
 import app.entities.Guide;
 import app.entities.Trip;
@@ -11,6 +13,8 @@ import java.util.List;
 
 public class Populator {
     private EntityManagerFactory emf;
+    private static List<TripDTO> listOfTrips;
+    private static List<GuideDTO> listOfGuides;
 
 
     public Populator(EntityManagerFactory emf) {
@@ -140,5 +144,15 @@ public class Populator {
             em.createQuery("DELETE FROM " + entityClass.getSimpleName()).executeUpdate();
             em.getTransaction().commit();
         }
+    }
+
+    public void populateDb(){
+        List<Guide> entityListOfGuides = listOfGuides();
+        persist(entityListOfGuides);
+        List<Trip> entityListOfTrips = listOfTrips();
+
+        // Convert entities to DTOs after persisting
+        listOfGuides = entityListOfGuides.stream().map(GuideDTO::new).toList();
+        listOfTrips = entityListOfTrips.stream().map(TripDTO::new).toList();
     }
 }
