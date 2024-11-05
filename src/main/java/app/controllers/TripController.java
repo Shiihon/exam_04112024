@@ -2,8 +2,10 @@ package app.controllers;
 
 import app.daos.TripDAO;
 import app.dtos.TripDTO;
+import app.dtos.TripWithGuideInfoDTO;
 import app.enums.Category;
 import app.exceptions.ApiException;
+import app.service.TripService;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityNotFoundException;
 
@@ -11,9 +13,11 @@ import java.util.List;
 
 public class TripController implements Controller {
     private static TripDAO tripDAO;
+    private static TripService tripService;
 
-    public TripController(TripDAO dao) {
+    public TripController(TripDAO dao, TripService service) {
         tripDAO = dao;
+        this.tripService = service;
     }
 
     @Override
@@ -40,15 +44,17 @@ public class TripController implements Controller {
     public void getById(Context ctx) {
         try {
             Long id = Long.parseLong(ctx.pathParam("id"));
-            TripDTO trip = tripDAO.getById(id);
 
-            if (trip == null) {
+            TripWithGuideInfoDTO tripWithGuide = tripService.getTripWithGuide(id);
+
+
+            if (tripWithGuide == null) {
                 ctx.res().setStatus(404);
                 throw new EntityNotFoundException("trip with id " + id + " could not be found");
             }
 
             ctx.res().setStatus(200);
-            ctx.json(trip);
+            ctx.json(tripWithGuide);
 
         } catch (EntityNotFoundException e) {
             throw new ApiException(404, e.getMessage());
@@ -58,7 +64,30 @@ public class TripController implements Controller {
         }
     }
 
-    public void addGuideToTrip(Context ctx){
+    public void getTripWithGuide(Context ctx) {
+        try {
+            Long tripId = Long.parseLong(ctx.pathParam("tripId"));
+            TripWithGuideInfoDTO tripWithGuide = tripService.getTripWithGuide(tripId);
+
+            if (tripWithGuide == null) {
+                ctx.res().setStatus(404);
+                throw new EntityNotFoundException("Trip with id " + tripId + " could not be found");
+            }
+            ctx.res().setStatus(200);
+            ctx.json(tripWithGuide);
+
+        } catch (EntityNotFoundException e) {
+            throw new ApiException(404, e.getMessage());
+
+        } catch (NumberFormatException e) {
+            throw new ApiException(400, "Invalid ID format. Must be a number.");
+
+        } catch (Exception e) {
+            throw new ApiException(500, e.getMessage());
+        }
+    }
+
+    public void addGuideToTrip(Context ctx) {
         try {
             Long tripId = Long.valueOf(ctx.queryParam("tripId"));
             Long guideId = Long.valueOf(ctx.queryParam("guideId"));

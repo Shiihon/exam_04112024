@@ -24,7 +24,6 @@ public class TripDTO {
     private LocalTime endTime;
     private Double longitude;
     private Double latitude;
-    private GuideDTO guideDTO;
 
     public TripDTO(Trip trip) {
         this.id = trip.getId();
@@ -35,7 +34,6 @@ public class TripDTO {
         this.endTime = trip.getEndTime();
         this.longitude = trip.getLongitude();
         this.latitude = trip.getLatitude();
-        this.guideDTO = new GuideDTO();
     }
 
     @JsonIgnore

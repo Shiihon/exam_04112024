@@ -29,4 +29,5 @@ public class Trip {
     private LocalTime endTime;
     private Double longitude;
     private Double latitude;
+
 }
