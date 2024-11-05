@@ -3,6 +3,7 @@ package app.daos;
 import app.dtos.TripDTO;
 import app.entities.Guide;
 import app.entities.Trip;
+import app.enums.Category;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -114,7 +115,7 @@ public class TripDAO implements IDAO<TripDTO>, ITripGuideDAO {
         }
     }
 
-    @Override
+    @Override //Forgot em.trans.begin
     public void addGuideToTrip(Long tripId, Long guideId) {
         try (EntityManager em = emf.createEntityManager()) {
 
@@ -153,13 +154,16 @@ public class TripDAO implements IDAO<TripDTO>, ITripGuideDAO {
         }
     }
 
-//    public List<TripDTO> getTripsByCategory(Category category) {
-//        try (EntityManager em = emf.createEntityManager()) {
-//            String query = "SELECT t FROM Trip t WHERE t.category = :category";
-//            TypedQuery<Trip> typedQuery = em.createQuery(query, Trip.class);
-//            typedQuery.setParameter("category", category);
-//            List<Trip> trips = typedQuery.getResultList();
-//            return trips.stream().map(TripDTO::new).collect(Collectors.toList());
-//        }
-//    }
+    //FIXED!
+    public List<TripDTO> getTripsByCategory(Category category) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            List<Trip> trips = em.createQuery("SELECT t FROM Trip t WHERE t.category = :category", Trip.class)
+                    .setParameter("category", category)
+                    .getResultList();
+
+            return trips.stream().map(TripDTO::new).collect(Collectors.toList());
+        }
+    }
 }

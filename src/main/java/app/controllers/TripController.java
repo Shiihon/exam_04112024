@@ -137,7 +137,8 @@ public class TripController implements Controller {
             trip.setId(id);
 
             tripDAO.delete(id);
-            ctx.res().setStatus(204);
+            ctx.res().setStatus(200); //changed from 204, Indicates success without returning any content.
+            ctx.json("Trip deleted succesfully...");
 
         } catch (EntityNotFoundException e) {
             throw new ApiException(404, e.getMessage());

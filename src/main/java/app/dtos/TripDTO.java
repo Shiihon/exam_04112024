@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @NoArgsConstructor
@@ -19,9 +20,9 @@ public class TripDTO {
     private Double price;
     private Category category;
     @JsonProperty("start_time")
-    private LocalTime startTime;
+    private String startTime;
     @JsonProperty("end_time")
-    private LocalTime endTime;
+    private String endTime;
     private Double longitude;
     private Double latitude;
 
@@ -30,8 +31,8 @@ public class TripDTO {
         this.name = trip.getName();
         this.price = trip.getPrice();
         this.category = trip.getCategory();
-        this.startTime = trip.getStartTime();
-        this.endTime = trip.getEndTime();
+        this.startTime = trip.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm"));
+        this.endTime = trip.getEndTime().format(DateTimeFormatter.ofPattern("HH:mm"));
         this.longitude = trip.getLongitude();
         this.latitude = trip.getLatitude();
     }
@@ -43,8 +44,8 @@ public class TripDTO {
                 .name(this.name)
                 .price(this.price)
                 .category(this.category)
-                .startTime(this.startTime)
-                .endTime(this.endTime)
+                .startTime(LocalTime.parse(this.startTime, DateTimeFormatter.ofPattern("HH:mm")))
+                .endTime(LocalTime.parse(this.endTime, DateTimeFormatter.ofPattern("HH:mm")))
                 .longitude(this.longitude)
                 .latitude(this.latitude)
                 .build();
