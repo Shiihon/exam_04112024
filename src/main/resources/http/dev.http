@@ -1,12 +1,48 @@
+### Create a new user - this one will only get a USER role by default
+POST {{url}}/auth/register/
+
+{
+    "username": "user",
+    "password": "test123"
+}
+
+###
+POST {{url}}/auth/login/
+
+{
+    "username": "user",
+    "password": "test123"
+}
+
+> {%
+    client.global.set("jwt_token", response.body.token);
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}
+
+### Add admin role to user
+POST {{url}}/auth/user/addrole/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+    "role": "admin"
+}
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
 ### Get all trips
-GET {{URL}}
+GET {{url}}/trips
 
 ### Get trip by id
-GET {{URL}}/1
+GET {{url}}/trips/1
+Authorization: Bearer {{jwt_token}}
+
 
 ### Create trip
-POST {{URL}}
+POST {{url}}/trips
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
 
 {
   "name": "TestTrip",
@@ -19,18 +55,26 @@ Content-Type: application/json
 }
 
 ### Update by id
-PUT {{URL}}/7
+PUT {{url}}/trips/11
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
 
 {
   "name": "NewName"
 }
 
 ### Delete trip by id
-DELETE {{URL}}/10
+DELETE {{url}}/trips/10
+Authorization: Bearer {{jwt_token}}
+
 
 ### Add trip to guide
-PUT {{URL}}/1/guides/2
+PUT {{url}}/trips/1/guides/2
+Authorization: Bearer {{jwt_token}}
+
 
 ### Filter Trips by category
-GET {{URL}}/category/FOREST
+GET {{url}}/trips/category/FOREST
+Authorization: Bearer {{jwt_token}}
+

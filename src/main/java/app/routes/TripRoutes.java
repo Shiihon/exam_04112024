@@ -2,6 +2,7 @@ package app.routes;
 
 import app.controllers.TripController;
 import app.daos.TripDAO;
+import app.security.enums.Role;
 import app.service.TripService;
 import io.javalin.apibuilder.EndpointGroup;
 import jakarta.persistence.EntityManagerFactory;
@@ -21,13 +22,13 @@ public class TripRoutes {
 
     public EndpointGroup getTripRoutes() {
         return () -> {
-            get("/", tripController::getAll);
-            get("/{id}", tripController::getById);
-            get("/category/{category}", tripController::getTripsByCategory);
-            post("/", tripController::create);
-            put("/{id}", tripController::update);
-            delete("/{id}", tripController::delete);
-            put("/{tripId}/guides/{guideId}", tripController::addGuideToTrip);
+            get("/", tripController::getAll, Role.ANYONE);
+            get("/{id}", tripController::getById, Role.USER, Role.ANYONE);
+            get("/category/{category}", tripController::getTripsByCategory, Role.USER);
+            post("/", tripController::create, Role.ADMIN);
+            put("/{id}", tripController::update, Role.ADMIN);
+            delete("/{id}", tripController::delete, Role.ADMIN);
+            put("/{tripId}/guides/{guideId}", tripController::addGuideToTrip, Role.ADMIN);
         };
     }
 

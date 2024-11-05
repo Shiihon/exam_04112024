@@ -85,6 +85,7 @@ public class SecurityController implements ISecurityController {
                 ctx.status(HttpStatus.CREATED).json(returnObject
                         .put("token", token)
                         .put("username", created.getUsername()));
+
             } catch (EntityExistsException e) {
                 ctx.status(HttpStatus.UNPROCESSABLE_CONTENT);
                 ctx.json(returnObject.put("msg", "User already exists"));
