@@ -33,7 +33,7 @@ public class TripDAO implements IDAO<TripDTO>, ITripGuideDAO {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Trip> query = em.createQuery("SELECT t FROM Trip t", Trip.class);
 
-            return query.getResultList().stream().map(trip -> new TripDTO(trip)).collect(Collectors.toList());
+            return query.getResultList().stream().map(TripDTO::new).collect(Collectors.toList());
 
         } catch (RollbackException e) {
             throw new RollbackException("Could not get all trips", e);
@@ -103,6 +103,7 @@ public class TripDAO implements IDAO<TripDTO>, ITripGuideDAO {
     @Override
     public void delete(Long id) {
         try (EntityManager em = emf.createEntityManager()) {
+
             Trip trip = em.find(Trip.class, id);
             if (trip == null) {
                 throw new EntityNotFoundException("Trip with id " + id + " not found");
@@ -116,8 +117,9 @@ public class TripDAO implements IDAO<TripDTO>, ITripGuideDAO {
     @Override
     public void addGuideToTrip(Long tripId, Long guideId) {
         try (EntityManager em = emf.createEntityManager()) {
-            Trip trip = em.find(Trip.class, tripId);
 
+            em.getTransaction().begin();
+            Trip trip = em.find(Trip.class, tripId);
             if (trip == null) {
                 throw new EntityNotFoundException("Trip with id " + tripId + " not found");
             }
@@ -130,13 +132,14 @@ public class TripDAO implements IDAO<TripDTO>, ITripGuideDAO {
             em.getTransaction().commit();
 
         } catch (IllegalStateException e) {
-            throw new IllegalArgumentException("Failed to add trip to guide" + tripId + ": " + e.getMessage(), e);
+            throw new IllegalArgumentException("Failed to add trip to guide " + tripId + ": " + e.getMessage(), e);
         }
     }
 
     @Override
     public Set<TripDTO> getTripsByGuide(Long guideId) {
         try (EntityManager em = emf.createEntityManager()) {
+
             Guide guide = em.find(Guide.class, guideId);
             if (guide == null) {
                 throw new EntityNotFoundException("Guide with id " + guideId + " not found");

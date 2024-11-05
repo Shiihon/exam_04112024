@@ -30,7 +30,7 @@ Content-Type: application/json
 DELETE {{URL}}/3
 
 ### Add trip to guide // not working
-PUT {{URL}}/trips/1/guides/2
+PUT {{URL}}/1/guides/2
 
 ### Filter Trips by category // not working
 GET {{URL}}/?category=FOREST

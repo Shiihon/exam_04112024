@@ -65,8 +65,8 @@ public class TripController implements Controller {
 
     public void addGuideToTrip(Context ctx) {
         try {
-            Long tripId = Long.valueOf(ctx.queryParam("tripId"));
-            Long guideId = Long.valueOf(ctx.queryParam("guideId"));
+            Long tripId = Long.parseLong(ctx.pathParam("tripId"));
+            Long guideId = Long.parseLong(ctx.pathParam("guideId"));
 
             tripDAO.addGuideToTrip(tripId, guideId);
 
