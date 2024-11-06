@@ -49,23 +49,23 @@ class TripRoutesTest {
 
     @BeforeEach
     void setUp() {
-        List<Guide> entityListOfGuides = populator.listOfGuides();
-        populator.persist(entityListOfGuides);
+//        List<Guide> entityListOfGuides = populator.listOfGuides();
+//        populator.persist(entityListOfGuides);
         List<Trip> entityListOfTrips = populator.listOfTrips();
         populator.persist(entityListOfTrips);
 
         // Convert entities to DTOs after persisting
-        listOfGuides = entityListOfGuides.stream().map(GuideDTO::new).toList();
+//        listOfGuides = entityListOfGuides.stream().map(GuideDTO::new).toList();
         listOfTrips = entityListOfTrips.stream().map(TripDTO::new).toList();
 
         System.out.println(listOfTrips);
-        System.out.println(listOfGuides);
+//        System.out.println(listOfGuides);
     }
 
     @AfterEach
     void tearDown() {
         populator.cleanup(Trip.class);
-        populator.cleanup(Guide.class);
+//        populator.cleanup(Guide.class);
     }
 
     @AfterAll
@@ -88,7 +88,17 @@ class TripRoutesTest {
 
     @Test
     void getById() {
-        // OBS problemer pga TripService.
+        Long expectedId = listOfTrips.get(0).getId();
+
+            TripDTO actual = given()
+                            .when()
+                            .get(BASE_URL + "/trips/{tripId}", expectedId)
+                            .then()
+                            .log().all()
+                            .statusCode(200)
+                            .extract()
+                            .as(TripDTO.class);
+            assertThat(actual.getId(), is(equalTo(expectedId)));
     }
 
     @Test
