@@ -8,10 +8,13 @@ import app.exceptions.ApiException;
 import app.service.TripService;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class TripController implements Controller {
+    private static final Logger log = LoggerFactory.getLogger(TripController.class);
     private static TripDAO tripDAO;
     private final TripService tripService;
 
@@ -115,7 +118,7 @@ public class TripController implements Controller {
             TripDTO updatedTrip = tripDAO.update(trip);
 
             ctx.res().setStatus(200);
-            ctx.json(updatedTrip);
+            ctx.json(updatedTrip, TripDTO.class);
 
         } catch (NumberFormatException e) {
             throw new ApiException(400, "Invalid ID format. Must be a number.");
@@ -124,7 +127,7 @@ public class TripController implements Controller {
             throw new ApiException(404, "trip with the given id, could not be found");
 
         } catch (Exception e) {
-            throw new ApiException(500, "Issues in the DB");
+            throw new ApiException(500, "Persistence issue ...");
         }
 
     }
