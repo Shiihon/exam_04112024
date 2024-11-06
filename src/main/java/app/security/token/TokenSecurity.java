@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public class TokenSecurity implements ITokenSecurity {
     private static final Logger log = LoggerFactory.getLogger(TokenSecurity.class);
 
-
     /**
      * {@inheritDoc}
      */
